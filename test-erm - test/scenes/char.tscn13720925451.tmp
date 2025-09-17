@@ -1,0 +1,35 @@
+[gd_scene load_steps=8 format=3 uid="uid://bhib5c6mmqaom"]
+
+[ext_resource type="Script" uid="uid://cy0qek4kndw1j" path="res://scripts/move_it.gd" id="1_wojmw"]
+[ext_resource type="Texture2D" uid="uid://cdh0brcvh4sp7" path="res://res/icon.svg" id="2_pkhve"]
+[ext_resource type="Script" uid="uid://pm1wpisa88dw" path="res://scenes/camera_3d.gd" id="3_s4dg7"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_iyybw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s4dg7"]
+albedo_texture = ExtResource("2_pkhve")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_72dkq"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_pkhve"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="character" type="CharacterBody3D"]
+script = ExtResource("1_wojmw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_iyybw")
+surface_material_override/0 = SubResource("StandardMaterial3D_s4dg7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_72dkq")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.149023, 0.642648, 0)
+fov = 90.0
+script = ExtResource("3_s4dg7")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_pkhve")

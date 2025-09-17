@@ -1,0 +1,292 @@
+[gd_scene load_steps=35 format=3 uid="uid://bnytw57bwmji8"]
+
+[ext_resource type="PackedScene" uid="uid://dyrmtukbnb4br" path="res://scenes/start_screen.tscn" id="1_d5dl1"]
+[ext_resource type="Texture2D" uid="uid://cdh0brcvh4sp7" path="res://res/icon.svg" id="1_fm4en"]
+[ext_resource type="Script" uid="uid://cpdbiweqmy8xl" path="res://scripts/multiplayer_spawner.gd" id="1_hlc4h"]
+[ext_resource type="PackedScene" uid="uid://bhib5c6mmqaom" path="res://scenes/char.tscn" id="2_0psjf"]
+[ext_resource type="Script" uid="uid://bhl354w6hhimp" path="res://scripts/pause.gd" id="2_d5dl1"]
+[ext_resource type="Script" uid="uid://bwfe8t8mgatgl" path="res://scripts/rigid_box.gd" id="5_yw8f4"]
+[ext_resource type="Script" uid="uid://ci0g6yxhv5c2r" path="res://scripts/rigid_ball.gd" id="6_3drpd"]
+[ext_resource type="Script" uid="uid://cjrg2h0ct1vu" path="res://scripts/vehicle_body_3d.gd" id="8_a3oai"]
+[ext_resource type="Script" uid="uid://bbmedj1dfh5pb" path="res://scenes/treadmill.gd" id="9_a3oai"]
+[ext_resource type="Texture2D" uid="uid://cwhxo31athnll" path="res://res/cat.png" id="10_ysate"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_0psjf"]
+properties/0/path = NodePath("rigidBox:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("rigidBall:position")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("VehicleBody3D:position")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath("rigidBox:rotation")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath("rigidBall:rotation")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+properties/5/path = NodePath("VehicleBody3D:rotation")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+properties/6/path = NodePath("treadmill/CollisionShape3D/MeshInstance3D:rotation")
+properties/6/spawn = true
+properties/6/replication_mode = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3drpd"]
+size = Vector3(50, 1, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jka67"]
+albedo_color = Color(0.581033, 0.581033, 0.581033, 1)
+albedo_texture = ExtResource("1_fm4en")
+
+[sub_resource type="BoxMesh" id="BoxMesh_noarx"]
+material = SubResource("StandardMaterial3D_jka67")
+size = Vector3(50, 1, 50)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4xowi"]
+size = Vector3(1, 8, 55)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a3oai"]
+size = Vector3(7, 1, 5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ysate"]
+size = Vector3(7, 1, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5t4e2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oqwcg"]
+albedo_texture = ExtResource("1_fm4en")
+
+[sub_resource type="BoxMesh" id="BoxMesh_a6664"]
+material = SubResource("StandardMaterial3D_oqwcg")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_5t4e2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xvgsr"]
+albedo_texture = ExtResource("1_fm4en")
+
+[sub_resource type="SphereMesh" id="SphereMesh_oqwcg"]
+material = SubResource("StandardMaterial3D_xvgsr")
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_a202f"]
+
+[sub_resource type="Sky" id="Sky_noarx"]
+sky_material = SubResource("ProceduralSkyMaterial_a202f")
+
+[sub_resource type="Environment" id="Environment_4xowi"]
+background_mode = 2
+sky = SubResource("Sky_noarx")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fm4en"]
+albedo_texture = ExtResource("1_fm4en")
+
+[sub_resource type="BoxMesh" id="BoxMesh_r3fl7"]
+material = SubResource("StandardMaterial3D_fm4en")
+size = Vector3(2, 1, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jka67"]
+size = Vector3(2, 1, 4)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_i5arm"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_a3oai"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ysate"]
+radius = 1.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7yrbd"]
+albedo_texture = ExtResource("10_ysate")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_7yrbd"]
+material = SubResource("StandardMaterial3D_7yrbd")
+top_radius = 1.5
+bottom_radius = 1.5
+
+[node name="world" type="Node3D"]
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_0psjf")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://bhib5c6mmqaom")
+spawn_path = NodePath("../spawnPoint")
+spawn_limit = 4
+script = ExtResource("1_hlc4h")
+network_player = ExtResource("2_0psjf")
+
+[node name="Control" parent="." instance=ExtResource("1_d5dl1")]
+
+[node name="floor" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="floor"]
+shape = SubResource("BoxShape3D_3drpd")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="floor"]
+mesh = SubResource("BoxMesh_noarx")
+
+[node name="wall1" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(0.866025, -0.5, 0, 0.5, 0.866025, 0, 0, 0, 1, -24.5809, 0, 0)
+shape = SubResource("BoxShape3D_4xowi")
+
+[node name="wall2" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0, 1, 25.1389, 0, 0)
+shape = SubResource("BoxShape3D_4xowi")
+
+[node name="wall3" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(-4.37114e-08, 0, -1, -0.5, 0.866025, 2.18557e-08, 0.866025, 0.5, -3.78552e-08, 0.531652, 0, 24.6634)
+shape = SubResource("BoxShape3D_4xowi")
+
+[node name="wall4" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0.5, 0.866025, -2.18557e-08, 0.866025, -0.5, -3.78552e-08, 0.531652, 0, -24.9707)
+shape = SubResource("BoxShape3D_4xowi")
+
+[node name="ramp" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(0.805287, -0.592885, 0, 0.592885, 0.805287, 0, 0, 0, 1, -16.1575, 2.11758, 0)
+shape = SubResource("BoxShape3D_a3oai")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="floor/ramp"]
+mesh = SubResource("BoxMesh_ysate")
+
+[node name="rigidBox" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.41026, 5.39262, -4.3262)
+mass = 0.7
+script = ExtResource("5_yw8f4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="rigidBox"]
+shape = SubResource("BoxShape3D_5t4e2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="rigidBox"]
+transform = Transform3D(0.999999, -0.00107006, -0.000728172, 0.00107248, 0.999994, 0.00333521, 0.000724612, -0.00333599, 0.999994, 0, 0, 0)
+mesh = SubResource("BoxMesh_a6664")
+
+[node name="rigidBall" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.20513, 2.69631, -2.1631)
+mass = 0.7
+script = ExtResource("6_3drpd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="rigidBall"]
+shape = SubResource("SphereShape3D_5t4e2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="rigidBall"]
+mesh = SubResource("SphereMesh_oqwcg")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_4xowi")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.706292, 0.707921, 0, -0.707921, 0.706292, 0, 0, 0)
+light_energy = 2.05
+
+[node name="VehicleBody3D" type="VehicleBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.55405, 3.36599, -0.0650224)
+mass = 100.0
+script = ExtResource("8_a3oai")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleBody3D"]
+mesh = SubResource("BoxMesh_r3fl7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D"]
+shape = SubResource("BoxShape3D_jka67")
+
+[node name="frWheel" type="VehicleWheel3D" parent="VehicleBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, -0.5, 1)
+use_as_traction = true
+use_as_steering = true
+suspension_travel = 0.5
+suspension_stiffness = 20.0
+
+[node name="wheelMesh" type="MeshInstance3D" parent="VehicleBody3D/frWheel"]
+transform = Transform3D(-4.37114e-08, -0.1, 0, 1, -4.37114e-09, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_i5arm")
+
+[node name="flWheel" type="VehicleWheel3D" parent="VehicleBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, -0.5, 1)
+use_as_traction = true
+use_as_steering = true
+suspension_travel = 0.5
+suspension_stiffness = 20.0
+
+[node name="wheelMesh" type="MeshInstance3D" parent="VehicleBody3D/flWheel"]
+transform = Transform3D(-4.37114e-08, -0.1, 0, 1, -4.37114e-09, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_i5arm")
+
+[node name="brWheel" type="VehicleWheel3D" parent="VehicleBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, -0.5, -1)
+use_as_traction = true
+suspension_travel = 0.5
+suspension_stiffness = 20.0
+
+[node name="wheelMesh" type="MeshInstance3D" parent="VehicleBody3D/brWheel"]
+transform = Transform3D(-4.37114e-08, -0.1, 0, 1, -4.37114e-09, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_i5arm")
+
+[node name="blWheel" type="VehicleWheel3D" parent="VehicleBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, -0.5, -1)
+use_as_traction = true
+suspension_travel = 0.5
+suspension_stiffness = 20.0
+
+[node name="wheelMesh" type="MeshInstance3D" parent="VehicleBody3D/blWheel"]
+transform = Transform3D(-4.37114e-08, -0.1, 0, 1, -4.37114e-09, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_i5arm")
+
+[node name="spawnPoint" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.28548, 0)
+
+[node name="treadmill" type="StaticBody3D" parent="."]
+transform = Transform3D(0.999999, 0.00138312, -0.000927344, -0.00138329, 0.999999, -0.000184754, 0.000927083, 0.000186061, 1, 6.12739, -0.546581, 0)
+physics_material_override = SubResource("PhysicsMaterial_a3oai")
+constant_angular_velocity = Vector3(0, 0, 0.0174533)
+script = ExtResource("9_a3oai")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="treadmill"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CylinderShape3D_ysate")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="treadmill/CollisionShape3D"]
+mesh = SubResource("CylinderMesh_7yrbd")
+
+[node name="pause" type="Control" parent="."]
+process_mode = 3
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 491.0
+offset_top = 222.0
+offset_right = 531.0
+offset_bottom = 255.0
+script = ExtResource("2_d5dl1")
+
+[node name="PanelContainer" type="PanelContainer" parent="pause"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 2.212
+anchor_right = 2.212
+offset_left = -97.48
+offset_top = 16.0
+offset_right = 97.52
+offset_bottom = 154.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="pause/PanelContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="pause/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 30
+text = "Paused"
+fit_content = true
+horizontal_alignment = 1
+
+[node name="resume" type="Button" parent="pause/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Resume"
+
+[node name="quit" type="Button" parent="pause/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Quit"
+
+[connection signal="pressed" from="pause/PanelContainer/VBoxContainer/resume" to="pause" method="_on_resume_pressed"]
+[connection signal="pressed" from="pause/PanelContainer/VBoxContainer/quit" to="pause" method="_on_quit_pressed"]

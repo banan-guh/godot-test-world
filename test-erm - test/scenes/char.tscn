@@ -1,0 +1,58 @@
+[gd_scene load_steps=11 format=3 uid="uid://bhib5c6mmqaom"]
+
+[ext_resource type="Script" uid="uid://cy0qek4kndw1j" path="res://scripts/move_it.gd" id="1_wojmw"]
+[ext_resource type="Texture2D" uid="uid://cdh0brcvh4sp7" path="res://res/icon.svg" id="2_pkhve"]
+[ext_resource type="Script" uid="uid://pm1wpisa88dw" path="res://scripts/camera_3d.gd" id="3_s4dg7"]
+[ext_resource type="Texture2D" uid="uid://cwhxo31athnll" path="res://res/cat.png" id="4_jy00i"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_iyybw"]
+radius = 0.3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s4dg7"]
+albedo_texture = ExtResource("2_pkhve")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_72dkq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ud387"]
+albedo_texture = ExtResource("4_jy00i")
+
+[sub_resource type="SphereMesh" id="SphereMesh_2i740"]
+material = SubResource("StandardMaterial3D_ud387")
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_pkhve"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("Camera3D/MeshInstance3D:rotation")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[node name="character" type="CharacterBody3D"]
+editor_description = "i can still move it move it rico!!!!!!!"
+wall_min_slide_angle = 0.523599
+floor_stop_on_slope = false
+floor_max_angle = 0.523599
+script = ExtResource("1_wojmw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_iyybw")
+surface_material_override/0 = SubResource("StandardMaterial3D_s4dg7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_72dkq")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
+fov = 90.0
+script = ExtResource("3_s4dg7")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Camera3D"]
+transform = Transform3D(0.536328, 0, 0.84401, 0.245285, 0.956839, -0.155867, -0.807581, 0.290619, 0.513179, 0, 0, 0)
+mesh = SubResource("SphereMesh_2i740")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_pkhve")
