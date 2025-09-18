@@ -1,6 +1,6 @@
 extends Node
 
-const IP_ADDRESS: String = "192.168.1.71"
+const IP_ADDRESS: String = "localhost"
 const PORT: int = 1001
 var is_multiplayer: bool = false
 
